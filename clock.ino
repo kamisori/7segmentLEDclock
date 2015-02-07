@@ -127,7 +127,7 @@ void handleButtons() {
   if (setLeft != setLeftOld)
     setLeftProcessed = false;
   if (setLeft && !setLeftProcessed){
-    adjust(BTN_SET_LEFT);
+    adjustTime(BTN_SET_LEFT);
     setLeftProcessed = true;
     setLeftOld = true;
   }
@@ -136,7 +136,7 @@ void handleButtons() {
   if (setRight != setRightOld)
     setRightProcessed = false;
   if (setRight && !setRightProcessed){
-    adjust(BTN_SET_RIGHT);
+    adjustTime(BTN_SET_RIGHT);
     setRightProcessed = true;
     setRightOld = true;
   }
@@ -201,7 +201,7 @@ void handleIncrement() {
   prevIncOld = true;
 }
 
-void adjust(int button){
+void adjustTime(int button){
   if( setHours || setMinutes || setSeconds || setDay || setMonth || setYear ) {
     setHours = false;
     setMinutes = false;
