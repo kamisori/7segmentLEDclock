@@ -20,11 +20,17 @@
 #define ADJ_BY_THIRTY_DAYS 2592000
 #define ADJ_BY_YEAR 31536000
 
+#define SECS_IN_DAY 86400
+#define BEATS_IN_DAY 1000
+#define HEX_SECS_IN_DAY 65536
+
 #define SCREEN_HH_MM 1
 #define SCREEN_MM_SS 2
 #define SCREEN_DD_MM 3
 #define SCREEN_YYYY 4
-#define SCREEN_BLANK 5
+#define SCREEN_BEATS 5
+#define SCREEN_HEX 6
+#define SCREEN_BLANK 7
 
 Adafruit_7segment matrix = Adafruit_7segment();
 
@@ -296,6 +302,30 @@ void printTimeOn7SegDisplay() {
     matrix.drawColon(false);
     matrix.writeDigitNum(DIGIT_THIRD, (y / 10) % 10, setYear);
     matrix.writeDigitNum(DIGIT_FOURT, y % 10, setYear);
+  }
+  if(screen == SCREEN_BEATS) {
+    double tmp = now() % SECS_IN_DAY;
+    tmp = tmp / SECS_IN_DAY;
+    tmp = tmp * BEATS_IN_DAY;
+    unsigned int beatsTime = tmp;
+    
+    matrix.writeDigitRaw(DIGIT_FIRST, true << 7);
+    matrix.writeDigitNum(DIGIT_SECON, (beatsTime / 100) % 10, false);
+    matrix.drawColon(false);
+    matrix.writeDigitNum(DIGIT_THIRD, (beatsTime / 10) % 10, false);
+    matrix.writeDigitNum(DIGIT_FOURT, beatsTime % 10, false);
+  }
+  if(screen == SCREEN_HEX) {
+    double tmp = now() % SECS_IN_DAY;
+    tmp = tmp / SECS_IN_DAY;
+    tmp = tmp * HEX_SECS_IN_DAY;
+    unsigned int hexTime = tmp;
+    
+    matrix.writeDigitNum(DIGIT_FIRST, (hexTime / 4096), true);
+    matrix.writeDigitNum(DIGIT_SECON, (hexTime / 256) % 16, false);
+    matrix.drawColon(false);
+    matrix.writeDigitNum(DIGIT_THIRD, (hexTime / 16) % 16, true);
+    matrix.writeDigitNum(DIGIT_FOURT, hexTime % 16, false);
   }
   if(screen == SCREEN_BLANK)
     matrix.drawColon(false);
